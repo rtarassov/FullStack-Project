@@ -1,6 +1,7 @@
 package tarassov.project.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -17,8 +18,13 @@ public class Product {
     private String serialNumber;
     private String picture_path;
     private String description;
+
+    @Enumerated(EnumType.STRING)
     private ProductType productType;
+
     private Double value;
+
+    @DateTimeFormat(pattern = "MM.DD.YYYY")
     private Date buyDate;
 
     @ManyToOne
