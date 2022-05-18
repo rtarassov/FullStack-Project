@@ -24,7 +24,7 @@ public class Product {
 
     private Double value;
 
-    @DateTimeFormat(pattern = "MM.DD.YYYY")
+    @DateTimeFormat(pattern = "YYYY-MM-DD")
     private Date buyDate;
 
     @ManyToOne

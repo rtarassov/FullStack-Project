@@ -17,7 +17,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final StorageService storageService;
+    private final StorageService storageService; // Will be used to assign a storage location to a product if storage is not yet set
 
     public ProductController(ProductService productService, StorageService storageService) {
         this.productService = productService;
@@ -26,30 +26,19 @@ public class ProductController {
 
     @GetMapping("all-products")
     public List<Product> findAllProducts() {
-        log.info("findAllProducts was called from: [{}]", ProductController.class.toString());
+        log.info("findAllProducts was called from: [{}]", ProductController.class);
         return productService.findAllProducts();
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Product> findProductById(@PathVariable("id") Long productId) {
-        log.info("findProductById() was called from: [{}]", ProductController.class.toString());
+        log.info("findProductById() was called from: [{}]", ProductController.class);
         var product = productService.findProductById(productId);
         return  product.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TODO: Fix 400 BAD_REQUEST ResponseStatusException
-    // Sample RequestBody below:
-    //{
-    //    "name": "VGA to HDMI",
-    //        "serialNumber": "VGA-HDMI-123456789",
-    //        "picture_path": "src/main/resources/pictures/products/VGA-HDMI.jpg",
-    //        "description": "VGA to HDMI adapter, not opened.",
-    //        "productType": "ADAPTER",
-    //        "value": 15.29,
-    //        "buyDate": "23.05.2021",
-    //        "storage": null
-    //}
+
     @PostMapping
     public ResponseEntity<?> saveProductToDB(@RequestBody ProductRequest productRequest) {
         log.info("Trying to save product: [{}]", productRequest);
@@ -58,4 +47,17 @@ public class ProductController {
                 .formatted(id)))
                 .body(productRequest);
     }
+    // Sample RequestBody below:
+    /*
+     {
+     "name": "MiniDP to DP",
+     "serialNumber": "MINIDP-DP123456789",
+     "description": "MiniDP to DP adapter, not opened.",
+     "productType": "ADAPTER",
+     "value": 19.39,
+     "buyDate": "2022-07-22",
+     "storageId": 1
+     }
+     I left out picture path intentionally
+     */
 }

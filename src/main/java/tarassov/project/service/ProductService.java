@@ -11,6 +11,7 @@ import tarassov.project.repository.ProductRepository;
 import tarassov.project.repository.StorageRepository;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,9 @@ public class ProductService {
             productObject.setProductType(ProductType.valueOf(entity.getProductType()));
             productObject.setValue(entity.getValue());
             productObject.setStorage(storageObject);
+            productObject.setBuyDate(Date.valueOf(entity.getBuyDate()));
+
+            productRepository.save(productObject);
 
             return productObject.getId();
         } catch (Exception e) {
