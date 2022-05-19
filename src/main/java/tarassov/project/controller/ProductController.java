@@ -60,4 +60,15 @@ public class ProductController {
      }
      I left out picture path intentionally
      */
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long id) {
+        log.info("deleteProductById() called from: [{}]", ProductController.class);
+        boolean deleted = productService.deleteProductById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }
