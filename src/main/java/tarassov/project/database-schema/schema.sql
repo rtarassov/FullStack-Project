@@ -1,7 +1,8 @@
-CREATE DOMAIN EMAIL AS text
+CREATE EXTENSION citext;
+CREATE DOMAIN EMAIL AS citext
     CHECK ( value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
 
-CREATE TABLE IF NOT EXISTS storages  (
+CREATE TABLE IF NOT EXISTS storage  (
     id SERIAL PRIMARY KEY,
     location VARCHAR(15) NOT NULL,
     description VARCHAR(50)
@@ -19,9 +20,8 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS product (
     id SERIAL PRIMARY KEY,
-    storage_id INT,
     buy_date DATE,
     name VARCHAR(20) NOT NULL,
     description VARCHAR(50),
@@ -29,24 +29,5 @@ CREATE TABLE IF NOT EXISTS products (
     price DOUBLE PRECISION NOT NULL,
     type VARCHAR(20) NOT NULL,
     picture BYTEA,
-    CONSTRAINT fk_storage
-        FOREIGN KEY (storage_id)
-            REFERENCES storages(id)
-);
-
-CREATE TABLE IF NOT EXISTS user_storages (
-    user_id INT,
-    storage_id INT,
-    PRIMARY KEY (user_id, storage_id),
-        CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
-        CONSTRAINT fk_storage FOREIGN KEY(storage_id) REFERENCES storages(id)
-);
-
-CREATE TABLE IF NOT EXISTS storage_products (
-    storage_id INT,
-    product_id INT,
-    PRIMARY KEY(storage_id, product_id),
-        CONSTRAINT fk_storage FOREIGN KEY(storage_id) REFERENCES storages(id),
-        CONSTRAINT fk_product FOREIGN KEY(product_id) REFERENCES products(id)
-);
-
+    storage_id 
+)
