@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tarassov.project.dto.ProductRequest;
-import tarassov.project.model.Product;
+import tarassov.project.model.Products;
 import tarassov.project.model.ProductType;
 import tarassov.project.repository.ProductRepository;
 import tarassov.project.repository.StorageRepository;
@@ -33,7 +33,7 @@ public class ProductService {
 
         try {
             var storageObject = storageRepository.getById(entity.getStorageId());
-            var productObject = new Product();
+            var productObject = new Products();
 
             productObject.setName(entity.getName());
             productObject.setSerialNumber(entity.getSerialNumber());
@@ -41,7 +41,7 @@ public class ProductService {
             productObject.setDescription(entity.getDescription());
             productObject.setProductType(ProductType.valueOf(entity.getProductType()));
             productObject.setValue(entity.getValue());
-            productObject.setStorage(storageObject);
+            productObject.setStorages(storageObject);
             productObject.setBuyDate(Date.valueOf(entity.getBuyDate()));
 
             productRepository.save(productObject);
@@ -64,7 +64,7 @@ public class ProductService {
         return result;
     }
 
-    public Optional<Product> findProductById(Long id) {
+    public Optional<Products> findProductById(Long id) {
         log.info("Trying to find product by id: [{}]", id);
         var product = productRepository.findById(id);
 
@@ -72,7 +72,7 @@ public class ProductService {
         return product;
     }
 
-    public List<Product> findAllProducts() {
+    public List<Products> findAllProducts() {
         log.info("Trying to find all products from database");
         var products = productRepository.findAll();
         log.info("Products found: " + products);

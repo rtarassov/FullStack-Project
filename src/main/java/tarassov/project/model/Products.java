@@ -8,7 +8,7 @@ import java.sql.Date;
 
 @Entity
 @Data
-public class Product {
+public class Products {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +28,5 @@ public class Product {
     private Date buyDate;
 
     @ManyToOne
-    private Storage storage;
+    private Storages storages;
 }

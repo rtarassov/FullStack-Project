@@ -4,15 +4,15 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Data
 @Entity
-public class DemoModel {
-
+@Data
+public class Storages {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String description;
+
 }

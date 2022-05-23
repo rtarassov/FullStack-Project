@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "users")
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,5 +27,5 @@ public class User {
 
 
     @ManyToMany
-    private List<Storage> storage;
+    private List<Storages> storages;
 }

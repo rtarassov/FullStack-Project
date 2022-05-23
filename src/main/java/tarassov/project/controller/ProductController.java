@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tarassov.project.dto.ProductRequest;
-import tarassov.project.model.Product;
+import tarassov.project.model.Products;
 import tarassov.project.service.ProductService;
 import tarassov.project.service.StorageService;
 
@@ -25,13 +25,13 @@ public class ProductController {
     }
 
     @GetMapping("all-products")
-    public List<Product> findAllProducts() {
+    public List<Products> findAllProducts() {
         log.info("findAllProducts was called from: [{}]", ProductController.class);
         return productService.findAllProducts();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> findProductById(@PathVariable("id") Long productId) {
+    public ResponseEntity<Products> findProductById(@PathVariable("id") Long productId) {
         log.info("findProductById() was called from: [{}]", ProductController.class);
         var product = productService.findProductById(productId);
         return  product.map(ResponseEntity::ok)
