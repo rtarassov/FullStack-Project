@@ -3,6 +3,7 @@ package tarassov.project.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.sql.Date;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class Users {
     private String username;
     private String password; // TODO: Store passwords better
     private String name;
+
+    @Email
     private String email;
     private int productLimit;
 

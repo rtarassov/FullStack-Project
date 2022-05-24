@@ -1,5 +1,7 @@
 package tarassov.project.service;
 
+import antlr.StringUtils;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final StorageRepository storageRepository;
+    private final ServiceValidations serviceValidations;
 
-    public ProductService(ProductRepository productRepository, StorageRepository storageRepository) {
+    public ProductService(ProductRepository productRepository, StorageRepository storageRepository, ServiceValidations serviceValidations) {
         this.productRepository = productRepository;
         this.storageRepository = storageRepository;
+        this.serviceValidations = serviceValidations;
     }
 
     @Transactional
@@ -35,7 +39,11 @@ public class ProductService {
             var storageObject = storageRepository.getById(entity.getStorageId());
             var productObject = new Products();
 
-            productObject.setName(entity.getName());
+            if (serviceValidations.checkForCharacters(entity.getName())) {
+                productObject.setName(entity.getName());
+            } else {
+                throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
+            }
             productObject.setSerialNumber(entity.getSerialNumber());
             productObject.setPicture_path(entity.getPicture_path());
             productObject.setDescription(entity.getDescription());
