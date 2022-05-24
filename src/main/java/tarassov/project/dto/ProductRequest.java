@@ -10,7 +10,7 @@ public class ProductRequest {
     private Long pictureId;
     private String description;
     private String productType;
-    private Double value;
-    private String buyDate;
+    private Double price;
+    private String purchaseDate;
     private Long storageId;
 }

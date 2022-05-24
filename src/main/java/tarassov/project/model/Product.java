@@ -4,18 +4,18 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Data
-public class Products {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @NotNull
     @Size(min = 3, max = 20)
@@ -24,11 +24,11 @@ public class Products {
     @Size(min = 5, max = 20)
     private String serialNumber;
 
-    @ManyToOne
-    private Picture picture;
+    @OneToMany
+    private List<Picture> picture;
 
     @NotNull
-    @NotBlank
+    @Size(min = 5, max = 50)
     private String description;
 
     @NotNull
@@ -36,11 +36,11 @@ public class Products {
     private ProductType productType;
 
     @NotNull
-    private Double value;
+    private Double price;
 
     @DateTimeFormat(pattern = "YYYY-MM-DD")
     private Date purchaseDate;
 
-    @ManyToOne
-    private Storages storages;
+    @ManyToMany
+    private List<Storage> storages;
 }

@@ -6,4 +6,6 @@ import tarassov.project.model.Picture;
 
 public interface PictureRepository extends JpaRepository<Picture, Long> {
 
+
+
 }

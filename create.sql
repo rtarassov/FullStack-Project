@@ -1,52 +1,80 @@
-CREATE DOMAIN EMAIL AS text
-    CHECK ( value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
+CREATE TABLE IF NOT EXISTS public.users (
+    id SERIAL NOT NULL,
+    birth_date date,
+    email character varying(40),
+    name character varying(50),
+    password character varying(25),
+    product_limit integer NOT NULL,
+    user_type character varying(20),
+    username character varying(25),
 
-CREATE TABLE IF NOT EXISTS storages  (
-    id SERIAL PRIMARY KEY,
-    location VARCHAR(15) NOT NULL,
-    description VARCHAR(50)
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    birth_date DATE NOT NULL,
-    email EMAIL(62) NOT NULL UNIQUE,
-    username VARCHAR(15) NOT NULL UNIQUE,
-    password VARCHAR(15) NOT NULL,
-    product_limit SMALLINT NOT NULL,
-    user_type VARCHAR(15) NOT NULL,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL
+CREATE TABLE IF NOT EXISTS public.storage (
+    id SERIAL NOT NULL,
+    description character varying(50),
+    name character varying(30),
+
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS products (
-    id SERIAL PRIMARY KEY,
-    storage_id INT,
-    buy_date DATE,
-    name VARCHAR(20) NOT NULL,
-    description VARCHAR(50),
-    serial_number VARCHAR(20),
-    price DOUBLE PRECISION NOT NULL,
-    type VARCHAR(20) NOT NULL,
-    picture BYTEA,
-    CONSTRAINT fk_storage
-        FOREIGN KEY (storage_id)
-            REFERENCES storages(id)
+CREATE TABLE IF NOT EXISTS public.product (
+    id SERIAL NOT NULL,
+    description character varying(50),
+    name character varying(25),
+    product_type character varying(20),
+    purchase_date date,
+    serial_number character varying(25),
+    price double precision,
+    picture_id bigint,
+    storage_id bigint,
+
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS user_storages (
-    user_id INT,
-    storage_id INT,
-    PRIMARY KEY (user_id, storage_id),
-        CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
-        CONSTRAINT fk_storage FOREIGN KEY(storage_id) REFERENCES storages(id)
+CREATE TABLE IF NOT EXISTS public.picture (
+    id SERIAL NOT NULL,
+    content oid,
+    name character varying(50),
+
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS storage_products (
-    storage_id INT,
-    product_id INT,
-    PRIMARY KEY(storage_id, product_id),
-        CONSTRAINT fk_storage FOREIGN KEY(storage_id) REFERENCES storages(id),
-        CONSTRAINT fk_product FOREIGN KEY(product_id) REFERENCES products(id)
+CREATE TABLE IF NOT EXISTS public.users_storage (
+    id SERIAL NOT NULL,
+    users_id BIGINT NOT NULL,
+    storages_id BIGINT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS public.product_picture (
+    id SERIAL NOT NULL,
+    product_id BIGINT NOT NULL,
+    picture_id BIGINT NOT NULL,
+
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.storage_products (
+    id SERIAL NOT NULL,
+    storage_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
+
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE public.product_picture
+    ADD CONSTRAINT product_fk_id FOREIGN KEY (product_id) REFERENCES product(id),
+    ADD CONSTRAINT picture_fk_id FOREIGN KEY (picture_id) REFERENCES picture(id);
+
+ALTER TABLE public.storage_products
+    ADD CONSTRAINT storage_fk_id FOREIGN KEY (storage_id) REFERENCES storage(id),
+    ADD CONSTRAINT product_fk_id FOREIGN KEY (product_id) REFERENCES product(id);
+
+ALTER TABLE public.product
+    ADD CONSTRAINT storage_fk_id FOREIGN KEY (storage_id) REFERENCES storage(id),
+    ADD CONSTRAINT picture_fk_id FOREIGN KEY (picture_id) REFERENCES picture(id);
+
+ALTER TABLE public.users_storage
+    ADD CONSTRAINT users_storages_fk_users_id FOREIGN KEY (users_id) REFERENCES users(id),
+    ADD CONSTRAINT users_storages_fk_storages_id FOREIGN KEY (storages_id) REFERENCES storage(id);

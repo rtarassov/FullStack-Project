@@ -15,7 +15,7 @@ public class Picture {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Lob
     @NotNull

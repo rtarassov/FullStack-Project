@@ -1,19 +1,21 @@
 package tarassov.project.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.List;
 
 @Entity
 @Data
 @Table(name = "users")
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String username;
     private String password; // TODO: Store passwords better
@@ -26,9 +28,11 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
+    @NotNull
+    @DateTimeFormat(pattern = "YYYY-MM-DD")
     private Date birthDate;
 
 
     @ManyToMany
-    private List<Storages> storages;
+    private List<Storage> storage;
 }

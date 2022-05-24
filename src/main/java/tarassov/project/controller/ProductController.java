@@ -2,15 +2,12 @@ package tarassov.project.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import tarassov.project.dto.ProductRequest;
-import tarassov.project.model.Products;
+import tarassov.project.model.Product;
 import tarassov.project.service.ProductService;
 import tarassov.project.service.StorageService;
 
-import javax.validation.Valid;
-import javax.validation.executable.ValidateOnExecution;
 import java.net.URI;
 import java.util.List;
 
@@ -20,21 +17,20 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final StorageService storageService; // Will be used to assign a storage location to a product if storage is not yet set
 
-    public ProductController(ProductService productService, StorageService storageService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.storageService = storageService;
+
     }
 
     @GetMapping("all")
-    public List<Products> findAllProducts() {
+    public List<Product> findAllProducts() {
         log.info("findAllProducts was called from: [{}]", ProductController.class);
         return productService.findAllProducts();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Products> findProductById(@PathVariable("id") Long productId) {
+    public ResponseEntity<Product> findProductById(@PathVariable("id") Long productId) {
         log.info("findProductById() was called from: [{}]", ProductController.class);
         var product = productService.findProductById(productId);
         return  product.map(ResponseEntity::ok)

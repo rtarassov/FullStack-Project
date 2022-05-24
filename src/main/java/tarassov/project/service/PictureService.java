@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +30,7 @@ public class PictureService {
         return new ByteArrayResource(picture);
     }
 
-    public Long uploadPicture(@RequestParam MultipartFile multipartFile) throws Exception {
+    public Integer uploadPicture(@RequestParam MultipartFile multipartFile) {
         Picture picture = new Picture();
 
         try {
