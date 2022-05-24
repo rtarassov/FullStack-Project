@@ -27,7 +27,7 @@ public class ProductController {
         this.storageService = storageService;
     }
 
-    @GetMapping("all-products")
+    @GetMapping("all")
     public List<Products> findAllProducts() {
         log.info("findAllProducts was called from: [{}]", ProductController.class);
         return productService.findAllProducts();
@@ -43,26 +43,13 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<?> saveProductToDB(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<ProductRequest> saveProduct(@RequestBody ProductRequest productRequest) {
         log.info("Trying to save product: [{}]", productRequest);
         var id = productService.saveProductToDB(productRequest);
         return ResponseEntity.created(URI.create("/product/%d"
                 .formatted(id)))
                 .body(productRequest);
     }
-    // Sample RequestBody below:
-    /*
-     {
-     "name": "MiniDP to DP",
-     "serialNumber": "MINIDP-DP123456789",
-     "description": "MiniDP to DP adapter, not opened.",
-     "productType": "ADAPTER",
-     "value": 19.39,
-     "buyDate": "2022-07-22",
-     "storageId": 1
-     }
-     I left out picture path intentionally
-     */
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long id) {

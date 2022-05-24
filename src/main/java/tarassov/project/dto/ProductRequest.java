@@ -7,7 +7,7 @@ public class ProductRequest {
 
     private String name;
     private String serialNumber;
-    private String picture_path;
+    private Long pictureId;
     private String description;
     private String productType;
     private Double value;

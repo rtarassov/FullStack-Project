@@ -24,7 +24,8 @@ public class Products {
     @Size(min = 5, max = 20)
     private String serialNumber;
 
-    private String picture_path;
+    @ManyToOne
+    private Picture picture;
 
     @NotNull
     @NotBlank
@@ -38,7 +39,7 @@ public class Products {
     private Double value;
 
     @DateTimeFormat(pattern = "YYYY-MM-DD")
-    private Date buyDate;
+    private Date purchaseDate;
 
     @ManyToOne
     private Storages storages;

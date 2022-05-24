@@ -1,7 +1,5 @@
 package tarassov.project.service;
 
-import antlr.StringUtils;
-import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import tarassov.project.dto.ProductRequest;
 import tarassov.project.model.Products;
 import tarassov.project.model.ProductType;
+import tarassov.project.repository.PictureRepository;
 import tarassov.project.repository.ProductRepository;
 import tarassov.project.repository.StorageRepository;
 
@@ -24,11 +23,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final StorageRepository storageRepository;
     private final ServiceValidations serviceValidations;
+    private final PictureRepository pictureRepository;
 
-    public ProductService(ProductRepository productRepository, StorageRepository storageRepository, ServiceValidations serviceValidations) {
+    public ProductService(ProductRepository productRepository, StorageRepository storageRepository, ServiceValidations serviceValidations, PictureRepository pictureRepository) {
         this.productRepository = productRepository;
         this.storageRepository = storageRepository;
         this.serviceValidations = serviceValidations;
+        this.pictureRepository = pictureRepository;
     }
 
     @Transactional
@@ -38,6 +39,7 @@ public class ProductService {
         try {
             var storageObject = storageRepository.getById(entity.getStorageId());
             var productObject = new Products();
+            var pictureObject = pictureRepository.getById(entity.getPictureId());
 
             if (serviceValidations.checkForCharacters(entity.getName())) {
                 productObject.setName(entity.getName());
@@ -45,12 +47,12 @@ public class ProductService {
                 throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
             }
             productObject.setSerialNumber(entity.getSerialNumber());
-            productObject.setPicture_path(entity.getPicture_path());
+            productObject.setPicture(pictureObject);
             productObject.setDescription(entity.getDescription());
             productObject.setProductType(ProductType.valueOf(entity.getProductType()));
             productObject.setValue(entity.getValue());
             productObject.setStorages(storageObject);
-            productObject.setBuyDate(Date.valueOf(entity.getBuyDate()));
+            productObject.setPurchaseDate(Date.valueOf(entity.getBuyDate()));
 
             productRepository.save(productObject);
 
