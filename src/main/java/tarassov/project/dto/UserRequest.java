@@ -11,7 +11,7 @@ public class UserRequest {
     private String password;
     private String name;
     private String email;
-    private int productLimit;
+    private Long productLimit;
     private String userType;
     private Date birthDate;
 

@@ -25,7 +25,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Integer saveUserToDB(UserRequest userRequest) {
+    public Long saveUserToDB(UserRequest userRequest) {
         log.info("User to save: [{}]", userRequest);
 
         try {

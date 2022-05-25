@@ -14,16 +14,16 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String username;
-    private String password; // TODO: Store passwords better
+    private String password;
     private String name;
 
     @Email
     private String email;
-    private int productLimit;
+    private Long productLimit;
 
     @Enumerated(EnumType.STRING)
     private UserType userType;

@@ -14,8 +14,8 @@ import java.util.List;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull
     @Size(min = 3, max = 20)
@@ -41,6 +41,6 @@ public class Product {
     @DateTimeFormat(pattern = "YYYY-MM-DD")
     private Date purchaseDate;
 
-    @ManyToMany
-    private List<Storage> storages;
+    @ManyToOne
+    private Storage storage;
 }

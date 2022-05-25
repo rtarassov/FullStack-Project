@@ -5,18 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tarassov.project.dto.ProductRequest;
-import tarassov.project.model.Picture;
+import tarassov.project.dto.ProductStorageRequest;
 import tarassov.project.model.Product;
 import tarassov.project.model.ProductType;
-import tarassov.project.model.Storage;
-import tarassov.project.repository.PictureRepository;
 import tarassov.project.repository.ProductRepository;
 import tarassov.project.repository.StorageRepository;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,29 +23,36 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final StorageRepository storageRepository;
     private final ServiceValidations serviceValidations;
-    private final PictureRepository pictureRepository;
 
-    public ProductService(ProductRepository productRepository, StorageRepository storageRepository, ServiceValidations serviceValidations, PictureRepository pictureRepository) {
+    public ProductService(ProductRepository productRepository, StorageRepository storageRepository, ServiceValidations serviceValidations) {
         this.productRepository = productRepository;
         this.storageRepository = storageRepository;
         this.serviceValidations = serviceValidations;
-        this.pictureRepository = pictureRepository;
+    }
+
+    // Doesn't work
+    public void addProductToStorage(ProductStorageRequest productStorageRequest) {
+        try {
+            var productObject = productRepository.getById(productStorageRequest.getProductId());
+            var storageObject = storageRepository.getById(productStorageRequest.getStorageId());
+            // TODO:
+            // Need to rethink the database, because here I would need to have a List<Product> in Storage,
+            // But it messes up the tables.
+            // storageObject.getProduct().add(productObject);
+            storageRepository.save(storageObject);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Transactional
-    public Integer saveProductToDB(ProductRequest entity) {
+    public Long saveProductToDB(ProductRequest entity) {
         log.info("Entity to save: [{}]", entity);
 
         try {
             var storageObject = storageRepository.getById(entity.getStorageId());
             var productObject = new Product();
-            var pictureObject = pictureRepository.getById(entity.getPictureId());
-            // TODO: Write SQL query that returns all pictures that ares assigned to this Product and add them to this pictureList
-            var pictureList = new ArrayList<Picture>();
-            pictureList.add(pictureObject);
-
-            var storageList = new ArrayList<Storage>();
-            storageList.add(storageObject);
 
             if (serviceValidations.checkForCharacters(entity.getName())) {
                 productObject.setName(entity.getName());
@@ -57,17 +60,16 @@ public class ProductService {
                 throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
             }
             productObject.setSerialNumber(entity.getSerialNumber());
-            productObject.setPicture(pictureList);
             productObject.setDescription(entity.getDescription());
             productObject.setProductType(ProductType.valueOf(entity.getProductType()));
             productObject.setPrice(entity.getPrice());
-            productObject.setStorages(storageList);
+            productObject.setStorage(storageObject);
             productObject.setPurchaseDate(Date.valueOf(entity.getPurchaseDate()));
 
             productRepository.save(productObject);
-
             return productObject.getId();
         } catch (Exception e) {
+            log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }

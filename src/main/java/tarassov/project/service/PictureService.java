@@ -30,7 +30,7 @@ public class PictureService {
         return new ByteArrayResource(picture);
     }
 
-    public Integer uploadPicture(@RequestParam MultipartFile multipartFile) {
+    public Long uploadPicture(@RequestParam MultipartFile multipartFile) {
         Picture picture = new Picture();
 
         try {

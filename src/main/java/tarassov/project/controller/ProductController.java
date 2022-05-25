@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tarassov.project.dto.ProductRequest;
+import tarassov.project.dto.ProductStorageRequest;
 import tarassov.project.model.Product;
 import tarassov.project.service.ProductService;
 
@@ -44,6 +45,12 @@ public class ProductController {
         return ResponseEntity.created(URI.create("/product/%d"
                 .formatted(id)))
                 .body(productRequest);
+    }
+
+    @PostMapping("/add-to-storage")
+    public ResponseEntity<Void> addProductToStorage(@RequestBody ProductStorageRequest productStorageRequest) {
+        productService.addProductToStorage(productStorageRequest);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}")
