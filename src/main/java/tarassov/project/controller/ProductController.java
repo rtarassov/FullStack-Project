@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import tarassov.project.dto.ProductRequest;
 import tarassov.project.model.Product;
 import tarassov.project.service.ProductService;
-import tarassov.project.service.StorageService;
 
 import java.net.URI;
 import java.util.List;
