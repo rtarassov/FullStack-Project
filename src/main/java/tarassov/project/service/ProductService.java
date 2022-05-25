@@ -33,7 +33,6 @@ public class ProductService {
     // Doesn't work
     public void addProductToStorage(ProductStorageRequest productStorageRequest) {
         try {
-            var productObject = productRepository.getById(productStorageRequest.getProductId());
             var storageObject = storageRepository.getById(productStorageRequest.getStorageId());
             // TODO:
             // Need to rethink the database, because here I would need to have a List<Product> in Storage,
