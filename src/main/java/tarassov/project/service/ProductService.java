@@ -1,5 +1,6 @@
 package tarassov.project.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -7,7 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 import tarassov.project.dto.ProductRequest;
 import tarassov.project.dto.ProductStorageRequest;
 import tarassov.project.model.Product;
-import tarassov.project.model.ProductType;
 import tarassov.project.repository.ProductRepository;
 import tarassov.project.repository.StorageRepository;
 
@@ -18,17 +18,12 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
     private final StorageRepository storageRepository;
     private final ServiceValidations serviceValidations;
-
-    public ProductService(ProductRepository productRepository, StorageRepository storageRepository, ServiceValidations serviceValidations) {
-        this.productRepository = productRepository;
-        this.storageRepository = storageRepository;
-        this.serviceValidations = serviceValidations;
-    }
 
     // Doesn't work
     public void addProductToStorage(ProductStorageRequest productStorageRequest) {
@@ -46,30 +41,33 @@ public class ProductService {
     }
 
     @Transactional
-    public Long saveProductToDB(ProductRequest entity) {
-        log.info("Entity to save: [{}]", entity);
+    public Long saveProductToDB(ProductRequest productRequest) {
+        log.info("Entity to save: [{}]", productRequest);
 
         try {
-            var storageObject = storageRepository.getById(entity.getStorageId());
+            var storageObject = storageRepository.getById(productRequest.getStorageId());
             var productObject = new Product();
 
-            if (serviceValidations.checkForCharacters(entity.getName())) {
-                productObject.setName(entity.getName());
+            if (serviceValidations.checkForCharacters(productRequest.getName())) {
+                productObject.setName(productRequest.getName());
             } else {
                 throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
             }
-            productObject.setSerialNumber(entity.getSerialNumber());
-            productObject.setDescription(entity.getDescription());
-            productObject.setProductType(ProductType.valueOf(entity.getProductType()));
-            productObject.setPrice(entity.getPrice());
+            productObject.setSerialNumber(productRequest.getSerialNumber());
+            productObject.setDescription(productRequest.getDescription());
+            productObject.setProductType(productRequest.getProductType());
+            productObject.setPrice(productRequest.getPrice());
             productObject.setStorage(storageObject);
-            productObject.setPurchaseDate(Date.valueOf(entity.getPurchaseDate()));
+            productObject.setPurchaseDate(Date.valueOf(productRequest.getPurchaseDate()));
 
             productRepository.save(productObject);
             return productObject.getId();
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 

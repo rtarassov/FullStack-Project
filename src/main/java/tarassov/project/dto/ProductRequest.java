@@ -1,6 +1,7 @@
 package tarassov.project.dto;
 
 import lombok.Data;
+import tarassov.project.model.ProductType;
 
 @Data
 public class ProductRequest {
@@ -9,7 +10,7 @@ public class ProductRequest {
     private String serialNumber;
     private Long pictureId;
     private String description;
-    private String productType;
+    private ProductType productType;
     private Double price;
     private String purchaseDate;
     private Long storageId;

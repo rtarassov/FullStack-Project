@@ -5,8 +5,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import tarassov.project.model.Picture;
@@ -22,7 +20,7 @@ public class PictureService {
         this.pictureRepository = pictureRepository;
     }
 
-    public Resource downloadPicture(@PathVariable Long pictureId) {
+    public Resource downloadPicture(Long pictureId) {
         byte[] picture = pictureRepository.findById(pictureId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
                 .getContent();
@@ -30,7 +28,7 @@ public class PictureService {
         return new ByteArrayResource(picture);
     }
 
-    public Long uploadPicture(@RequestParam MultipartFile multipartFile) {
+    public Long uploadPicture(MultipartFile multipartFile) {
         Picture picture = new Picture();
 
         try {

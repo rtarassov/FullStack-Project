@@ -1,31 +1,32 @@
-CREATE TABLE IF NOT EXISTS public.users (
+CREATE TABLE IF NOT EXISTS users (
     id BIGINT NOT NULL,
     birth_date date,
-    email character varying(40),
-    name character varying(50),
-    password character varying(25),
+    email varchar(40),
+    name varchar(50),
+    password varchar(25),
     product_limit BIGINT NOT NULL,
-    user_type character varying(20),
-    username character varying(25),
+    user_type varchar(20),
+    username varchar(25),
 
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.storage (
+CREATE TABLE IF NOT EXISTS storage (
     id BIGINT NOT NULL,
-    description character varying(50),
-    name character varying(30),
+    description varchar(50),
+    name varchar(30),
+    sub_storage BIGINT REFERENCES storage(id),
 
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.product (
+CREATE TABLE IF NOT EXISTS product (
     id BIGINT NOT NULL,
-    description character varying(50),
-    name character varying(25),
-    product_type character varying(20),
+    description varchar(50),
+    name varchar(25),
+    product_type varchar(20),
     purchase_date date,
-    serial_number character varying(25),
+    serial_number varchar(25),
     price double precision,
     picture_id BIGINT,
     storage_id BIGINT,
@@ -33,21 +34,21 @@ CREATE TABLE IF NOT EXISTS public.product (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.picture (
+CREATE TABLE IF NOT EXISTS picture (
     id BIGINT NOT NULL,
     content oid,
-    name character varying(50),
+    name varchar(50),
 
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.users_storage (
+CREATE TABLE IF NOT EXISTS users_storage (
     id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     storage_id BIGINT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.product_picture (
+CREATE TABLE IF NOT EXISTS product_picture (
     id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
     picture_id BIGINT NOT NULL,
@@ -55,7 +56,7 @@ CREATE TABLE IF NOT EXISTS public.product_picture (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.product_storages (
+CREATE TABLE IF NOT EXISTS product_storages (
     id BIGINT NOT NULL,
     storages_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
@@ -63,18 +64,18 @@ CREATE TABLE IF NOT EXISTS public.product_storages (
     PRIMARY KEY (id)
 );
 
-ALTER TABLE public.product_picture
+ALTER TABLE product_picture
     ADD CONSTRAINT product_fk_id FOREIGN KEY (product_id) REFERENCES product(id),
     ADD CONSTRAINT picture_fk_id FOREIGN KEY (picture_id) REFERENCES picture(id);
 
-ALTER TABLE public.product_storages
+ALTER TABLE product_storages
     ADD CONSTRAINT storage_fk_id FOREIGN KEY (storages_id) REFERENCES storage(id),
     ADD CONSTRAINT product_fk_id FOREIGN KEY (product_id) REFERENCES product(id);
 
-ALTER TABLE public.product
+ALTER TABLE product
     ADD CONSTRAINT storage_fk_id FOREIGN KEY (storage_id) REFERENCES storage(id),
     ADD CONSTRAINT picture_fk_id FOREIGN KEY (picture_id) REFERENCES picture(id);
 
-ALTER TABLE public.users_storage
+ALTER TABLE users_storage
     ADD CONSTRAINT users_storages_fk_users_id FOREIGN KEY (user_id) REFERENCES users(id),
     ADD CONSTRAINT users_storages_fk_storages_id FOREIGN KEY (storage_id) REFERENCES storage(id);
