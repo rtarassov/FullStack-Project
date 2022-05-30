@@ -8,7 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
-import tarassov.project.dto.ProductRequest;
+import tarassov.project.dto.ProductDTO;
+import tarassov.project.model.ProductType;
 import tarassov.project.model.Storage;
 import tarassov.project.repository.StorageRepository;
 
@@ -24,7 +25,7 @@ class TestProductService {
     private ProductService productService;
 
     private Storage storage;
-    private ProductRequest productRequest;
+    private ProductDTO productDTO;
 
     @BeforeEach
     void setupStorage() {
@@ -36,17 +37,17 @@ class TestProductService {
 
     @BeforeEach
     void setupProductRequest() {
-        productRequest = new ProductRequest();
-        productRequest.setProductType("CABLE");
-        productRequest.setName("VGA");
-        productRequest.setStorageId(5L);
+        productDTO = new ProductDTO();
+        productDTO.setProductType(ProductType.CABLE);
+        productDTO.setName("VGA");
+        productDTO.setStorageId(5L);
     }
 
     @Test
     void testSavingProductToDB() {
         when(storageRepository.getById(anyLong())).thenReturn(storage);
         when(serviceValidations.checkForCharacters(anyString())).thenReturn(false);
-        Assertions.assertThrows(ResponseStatusException.class, () -> productService.saveProductToDB(productRequest));
+        Assertions.assertThrows(ResponseStatusException.class, () -> productService.saveProductToDB(productDTO));
         verify(storageRepository).getById(anyLong());
     }
 

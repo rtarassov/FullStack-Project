@@ -3,7 +3,7 @@ package tarassov.project.dto;
 import lombok.Data;
 
 @Data
-public class UserStorageRequest {
+public class UserStorageDTO {
     private Long userId;
     private Long storageId;
 }

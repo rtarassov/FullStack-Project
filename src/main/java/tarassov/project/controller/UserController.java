@@ -3,7 +3,7 @@ package tarassov.project.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tarassov.project.dto.UserRequest;
+import tarassov.project.dto.UserDTO;
 import tarassov.project.model.User;
 import tarassov.project.service.UserService;
 
@@ -28,11 +28,11 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserRequest> saveUser(@RequestBody UserRequest userRequest) {
-        log.info("Trying to save user: [{}]", userRequest);
-        var id = userService.saveUserToDB(userRequest);
+    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
+        log.info("Trying to save user: [{}]", userDTO);
+        var id = userService.saveUserToDB(userDTO);
         return ResponseEntity.created(URI.create("/user/%d"
                 .formatted(id)))
-                .body(userRequest);
+                .body(userDTO);
     }
 }

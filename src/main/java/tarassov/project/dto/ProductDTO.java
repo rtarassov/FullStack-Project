@@ -4,7 +4,7 @@ import lombok.Data;
 import tarassov.project.model.ProductType;
 
 @Data
-public class ProductRequest {
+public class ProductDTO {
 
     private String name;
     private String serialNumber;

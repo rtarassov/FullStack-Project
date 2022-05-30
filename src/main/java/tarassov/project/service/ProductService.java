@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import tarassov.project.dto.ProductRequest;
-import tarassov.project.dto.ProductStorageRequest;
+import tarassov.project.dto.ProductDTO;
+import tarassov.project.dto.ProductStorageDTO;
 import tarassov.project.model.Product;
 import tarassov.project.repository.ProductRepository;
 import tarassov.project.repository.StorageRepository;
@@ -26,9 +26,9 @@ public class ProductService {
     private final ServiceValidations serviceValidations;
 
     // Doesn't work
-    public void addProductToStorage(ProductStorageRequest productStorageRequest) {
+    public void addProductToStorage(ProductStorageDTO productStorageDTO) {
         try {
-            var storageObject = storageRepository.getById(productStorageRequest.getStorageId());
+            var storageObject = storageRepository.getById(productStorageDTO.getStorageId());
             // TODO:
             // Need to rethink the database, because here I would need to have a List<Product> in Storage,
             // But it messes up the tables.
@@ -41,24 +41,24 @@ public class ProductService {
     }
 
     @Transactional
-    public Long saveProductToDB(ProductRequest productRequest) {
-        log.info("Entity to save: [{}]", productRequest);
+    public Long saveProductToDB(ProductDTO productDTO) {
+        log.info("Entity to save: [{}]", productDTO);
 
         try {
-            var storageObject = storageRepository.getById(productRequest.getStorageId());
+            var storageObject = storageRepository.getById(productDTO.getStorageId());
             var productObject = new Product();
 
-            if (serviceValidations.checkForCharacters(productRequest.getName())) {
-                productObject.setName(productRequest.getName());
+            if (serviceValidations.checkForCharacters(productDTO.getName())) {
+                productObject.setName(productDTO.getName());
             } else {
                 throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
             }
-            productObject.setSerialNumber(productRequest.getSerialNumber());
-            productObject.setDescription(productRequest.getDescription());
-            productObject.setProductType(productRequest.getProductType());
-            productObject.setPrice(productRequest.getPrice());
+            productObject.setSerialNumber(productDTO.getSerialNumber());
+            productObject.setDescription(productDTO.getDescription());
+            productObject.setProductType(productDTO.getProductType());
+            productObject.setPrice(productDTO.getPrice());
             productObject.setStorage(storageObject);
-            productObject.setPurchaseDate(Date.valueOf(productRequest.getPurchaseDate()));
+            productObject.setPurchaseDate(Date.valueOf(productDTO.getPurchaseDate()));
 
             productRepository.save(productObject);
             return productObject.getId();
