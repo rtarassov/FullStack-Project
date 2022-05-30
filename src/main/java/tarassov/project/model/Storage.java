@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,7 @@ public class Storage {
     @Size(min = 3, max = 50)
     private String description;
 
-    private Long subStorage;
+    @OneToMany
+    private List<Storage> subStorage;
 
 }
