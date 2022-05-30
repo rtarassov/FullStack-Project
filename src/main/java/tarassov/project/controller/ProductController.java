@@ -60,4 +60,18 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateProductById(@PathVariable("id") Long id,
+                                               @RequestBody ProductDTO productDTO) {
+        log.info("updateProductById() called from: [{}]", ProductController.class);
+
+        var productId = productService.updateProductId(id, productDTO);
+
+        return ResponseEntity
+                .created(URI.create("/product/update/%d"
+                        .formatted(productId)))
+                        .body(productDTO);
+    }
+
+
 }

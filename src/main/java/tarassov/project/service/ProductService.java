@@ -8,11 +8,11 @@ import org.springframework.web.server.ResponseStatusException;
 import tarassov.project.dto.ProductDTO;
 import tarassov.project.dto.ProductStorageDTO;
 import tarassov.project.model.Product;
+import tarassov.project.repository.PictureRepository;
 import tarassov.project.repository.ProductRepository;
 import tarassov.project.repository.StorageRepository;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +24,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final StorageRepository storageRepository;
     private final ServiceValidations serviceValidations;
+    private final PictureRepository pictureRepository;
 
     // Doesn't work
     public void addProductToStorage(ProductStorageDTO productStorageDTO) {
@@ -58,7 +59,7 @@ public class ProductService {
             productObject.setProductType(productDTO.getProductType());
             productObject.setPrice(productDTO.getPrice());
             productObject.setStorage(storageObject);
-            productObject.setPurchaseDate(Date.valueOf(productDTO.getPurchaseDate()));
+            productObject.setPurchaseDate(productDTO.getPurchaseDate());
 
             productRepository.save(productObject);
             return productObject.getId();
@@ -67,7 +68,6 @@ public class ProductService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
     }
 
@@ -96,5 +96,34 @@ public class ProductService {
         var products = productRepository.findAll();
         log.info("Products found: " + products);
         return products;
+    }
+
+    @Transactional
+    public Long updateProductId(Long id, ProductDTO productDTO) {
+        log.info("Trying to update product [{}]", productDTO);
+
+        try {
+            var productObject = new Product();
+            var storageObject = storageRepository.getById(productDTO.getStorageId());
+
+            productObject.setId(id);
+            productObject.setName(productDTO.getName());
+            productObject.setSerialNumber(productDTO.getSerialNumber());
+            productObject.setPicture(pictureRepository.getById(productDTO.getPictureId()));
+            productObject.setDescription(productDTO.getDescription());
+            productObject.setProductType(productDTO.getProductType());
+            productObject.setPrice(productDTO.getPrice());
+            productObject.setPurchaseDate(productDTO.getPurchaseDate());
+            productObject.setStorage(storageObject);
+
+            productRepository.save(productObject);
+            return productObject.getId();
+        } catch (IllegalArgumentException e) {
+            log.info(e.toString());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
