@@ -24,8 +24,8 @@ public class Product {
     @Size(min = 5, max = 20)
     private String serialNumber;
 
-    @OneToMany
-    private List<Picture> picture;
+    @OneToOne
+    private Picture picture;
 
     @NotNull
     @Size(min = 5, max = 50)

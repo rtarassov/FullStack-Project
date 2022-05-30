@@ -48,14 +48,6 @@ CREATE TABLE IF NOT EXISTS users_storage (
     storage_id BIGINT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS product_picture (
-    id BIGINT NOT NULL,
-    product_id BIGINT NOT NULL,
-    picture_id BIGINT NOT NULL,
-
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE IF NOT EXISTS product_storages (
     id BIGINT NOT NULL,
     storages_id BIGINT NOT NULL,
@@ -64,16 +56,11 @@ CREATE TABLE IF NOT EXISTS product_storages (
     PRIMARY KEY (id)
 );
 
-ALTER TABLE product_picture
-    ADD CONSTRAINT product_fk_id FOREIGN KEY (product_id) REFERENCES product(id),
-    ADD CONSTRAINT picture_fk_id FOREIGN KEY (picture_id) REFERENCES picture(id);
-
 ALTER TABLE product_storages
     ADD CONSTRAINT storage_fk_id FOREIGN KEY (storages_id) REFERENCES storage(id),
     ADD CONSTRAINT product_fk_id FOREIGN KEY (product_id) REFERENCES product(id);
 
 ALTER TABLE product
-    ADD CONSTRAINT storage_fk_id FOREIGN KEY (storage_id) REFERENCES storage(id),
     ADD CONSTRAINT picture_fk_id FOREIGN KEY (picture_id) REFERENCES picture(id);
 
 ALTER TABLE users_storage
