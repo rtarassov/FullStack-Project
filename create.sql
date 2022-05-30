@@ -66,3 +66,10 @@ ALTER TABLE product
 ALTER TABLE users_storage
     ADD CONSTRAINT users_storages_fk_users_id FOREIGN KEY (user_id) REFERENCES users(id),
     ADD CONSTRAINT users_storages_fk_storages_id FOREIGN KEY (storage_id) REFERENCES storage(id);
+
+INSERT INTO storage (id, description, name, sub_storage) VALUES (3, 'Guest computer', 'On the table, no drawers', NULL);
+INSERT INTO storage (id, description, name, sub_storage) VALUES (2, 'Dining room', 'Dining room', 3);
+INSERT INTO storage (id, description, name, sub_storage) VALUES (1, 'Tom''s house', 'House 1', 2);
+
+INSERT INTO product (id, description, name, product_type, purchase_date, serial_number, price, picture_id, storage_id) VALUES (1, 'Wireless, with USB transmitter', 'DELL mouse', 'PERIPHERAL', '2018-11-22', 'mDELL20181122', 18.99, NULL, 3);
+INSERT INTO product (id, description, name, product_type, purchase_date, serial_number, price, picture_id, storage_id) VALUES (2, 'Wireless, with USB transmitter', 'DELL keyboard', 'PERIPHERAL', '2018-11-22', 'kDELL20181122', 18.99, NULL, 3);

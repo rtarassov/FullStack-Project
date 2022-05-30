@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,5 +22,7 @@ public class Storage {
     @NotNull
     @Size(min = 3, max = 50)
     private String description;
+
+    private Long subStorage;
 
 }
