@@ -28,11 +28,11 @@ public class PictureService {
         return new ByteArrayResource(picture);
     }
 
-    public Long uploadPicture(MultipartFile multipartFile) {
+    public Long uploadPicture(MultipartFile multipartFile, String name) {
         Picture picture = new Picture();
 
         try {
-            picture.setName(multipartFile.getName());
+            picture.setName(name);
             picture.setContent(multipartFile.getBytes());
 
             pictureRepository.save(picture);
