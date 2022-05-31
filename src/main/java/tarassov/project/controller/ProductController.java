@@ -44,7 +44,7 @@ public class ProductController {
                 .body(productDTO);
     }
 
-    @PostMapping("/add-to-storage")
+    @PutMapping("/add-to-storage")
     public ResponseEntity<Void> addProductToStorage(@RequestBody ProductStorageDTO productStorageDTO) {
         productService.addProductToStorage(productStorageDTO);
         return ResponseEntity.ok().build();

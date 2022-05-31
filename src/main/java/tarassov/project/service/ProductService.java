@@ -26,15 +26,13 @@ public class ProductService {
     private final ServiceValidations serviceValidations;
     private final PictureRepository pictureRepository;
 
-    // Doesn't work
     public void addProductToStorage(ProductStorageDTO productStorageDTO) {
         try {
+            var productObject = productRepository.getById(productStorageDTO.getProductId());
             var storageObject = storageRepository.getById(productStorageDTO.getStorageId());
-            // TODO:
-            // Need to rethink the database, because here I would need to have a List<Product> in Storage,
-            // But it messes up the tables.
-            // storageObject.getProduct().add(productObject);
-            storageRepository.save(storageObject);
+
+            productObject.setStorage(storageObject);
+            productRepository.save(productObject);
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -46,8 +44,8 @@ public class ProductService {
         log.info("Entity to save: [{}]", productDTO);
 
         try {
-            var storageObject = storageRepository.getById(productDTO.getStorageId());
             var productObject = new Product();
+            var storageObject = storageRepository.getById(productDTO.getStorageId());
 
             if (serviceValidations.checkForCharacters(productDTO.getName())) {
                 productObject.setName(productDTO.getName());
@@ -55,18 +53,33 @@ public class ProductService {
                 throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
             }
             productObject.setSerialNumber(productDTO.getSerialNumber());
-            productObject.setDescription(productDTO.getDescription());
+
+            if (productDTO.getPictureId() != null) {
+                productObject.setPicture(pictureRepository.getById(productDTO.getPictureId()));
+            }
+            if (productDTO.getDescription() != null) {
+                productObject.setDescription(productDTO.getDescription());
+            } else {
+                throw new IllegalArgumentException("You must provide a description");
+            }
             productObject.setProductType(productDTO.getProductType());
-            productObject.setPrice(productDTO.getPrice());
-            productObject.setStorage(storageObject);
+
+            if (productDTO.getPrice() > 0) {
+                productObject.setPrice(productDTO.getPrice());
+            } else {
+                throw new IllegalArgumentException("Price must be higher than 0.");
+            }
             productObject.setPurchaseDate(productDTO.getPurchaseDate());
+            productObject.setStorage(storageObject);
 
             productRepository.save(productObject);
+            log.info("Product saved successfully.");
             return productObject.getId();
         } catch (IllegalArgumentException e) {
             log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -107,22 +120,35 @@ public class ProductService {
             var storageObject = storageRepository.getById(productDTO.getStorageId());
 
             productObject.setId(id);
-            productObject.setName(productDTO.getName());
+            if (serviceValidations.checkForCharacters(productDTO.getName())) {
+                productObject.setName(productDTO.getName());
+            } else {
+                throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
+            }
             productObject.setSerialNumber(productDTO.getSerialNumber());
-            productObject.setPicture(pictureRepository.getById(productDTO.getPictureId()));
+
+            if (productDTO.getPictureId() != null) {
+                productObject.setPicture(pictureRepository.getById(productDTO.getPictureId()));
+            }
             productObject.setDescription(productDTO.getDescription());
             productObject.setProductType(productDTO.getProductType());
-            productObject.setPrice(productDTO.getPrice());
+
+            if (productDTO.getPrice() > 0) {
+                productObject.setPrice(productDTO.getPrice());
+            } else {
+                throw new IllegalArgumentException("Price must be higher than 0.");
+            }
             productObject.setPurchaseDate(productDTO.getPurchaseDate());
             productObject.setStorage(storageObject);
 
             productRepository.save(productObject);
+            log.info("Product saved successfully.");
             return productObject.getId();
         } catch (IllegalArgumentException e) {
             log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
