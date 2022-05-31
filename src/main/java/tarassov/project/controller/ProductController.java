@@ -65,7 +65,7 @@ public class ProductController {
                                                @RequestBody ProductDTO productDTO) {
         log.info("updateProductById() called from: [{}]", ProductController.class);
 
-        var productId = productService.updateProductId(id, productDTO);
+        var productId = productService.updateProductById(id, productDTO);
 
         return ResponseEntity
                 .created(URI.create("/product/update/%d"

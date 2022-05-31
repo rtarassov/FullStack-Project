@@ -112,7 +112,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Long updateProductId(Long id, ProductDTO productDTO) {
+    public Long updateProductById(Long id, ProductDTO productDTO) {
         log.info("Trying to update product [{}]", productDTO);
 
         try {
@@ -120,6 +120,7 @@ public class ProductService {
             var storageObject = storageRepository.getById(productDTO.getStorageId());
 
             productObject.setId(id);
+
             if (serviceValidations.checkForCharacters(productDTO.getName())) {
                 productObject.setName(productDTO.getName());
             } else {

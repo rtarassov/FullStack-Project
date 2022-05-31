@@ -5,9 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -25,6 +23,6 @@ public class Storage {
     private String description;
 
     @OneToMany
-    private List<Storage> subStorage;
+    private List<Storage> subStorageList;
 
 }

@@ -19,8 +19,9 @@ CREATE TABLE IF NOT EXISTS storage (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS storage_sub_storage (
-    sub_storage_id BIGSERIAL PRIMARY KEY NOT NULL,
+CREATE TABLE IF NOT EXISTS storage_sub_storage_list (
+    id BIGSERIAL PRIMARY KEY,
+    sub_storage_list_id BIGSERIAL NOT NULL,
     depth SMALLSERIAL NOT NULL,
     storage_id BIGSERIAL NOT NULL
 );
@@ -65,7 +66,7 @@ ALTER TABLE product_storages
     ADD CONSTRAINT storage_fk_id FOREIGN KEY (storages_id) REFERENCES storage(id),
     ADD CONSTRAINT product_fk_id FOREIGN KEY (product_id) REFERENCES product(id);
 
-ALTER TABLE storage_sub_storage
+ALTER TABLE storage_sub_storage_list
     ADD CONSTRAINT parent_storage_fk_id FOREIGN KEY (storage_id) REFERENCES storage(id);
 
 ALTER TABLE product
@@ -79,6 +80,18 @@ ALTER TABLE users_storage
 INSERT INTO storage (id, description, name) VALUES (3, 'Guest computer, no drawers', 'Guest computer table');
 INSERT INTO storage (id, description, name) VALUES (2, 'Dining room', 'Dining room');
 INSERT INTO storage (id, description, name) VALUES (1, 'Tom''s house', 'House 1');
+INSERT INTO storage (id, description, name) VALUES (30, 'Living room', 'Living room');
 
 INSERT INTO product (id, description, name, product_type, purchase_date, serial_number, price, picture_id, storage_id) VALUES (1, 'Wireless, with USB transmitter', 'DELL mouse', 'PERIPHERAL', '2018-11-22', 'mDELL20181122', 18.99, NULL, 3);
 INSERT INTO product (id, description, name, product_type, purchase_date, serial_number, price, picture_id, storage_id) VALUES (2, 'Wireless, with USB transmitter', 'DELL keyboard', 'PERIPHERAL', '2018-11-22', 'kDELL20181122', 18.99, NULL, 3);
+
+INSERT INTO picture (id, content, name) VALUES (1, 123, '123');
+INSERT INTO picture (id, content, name) VALUES (25, 22349, 'multipartFile');
+INSERT INTO picture (id, content, name) VALUES (26, 22350, 'multipartFile');
+INSERT INTO picture (id, content, name) VALUES (27, 22351, 'multipartFile');
+INSERT INTO picture (id, content, name) VALUES (28, 22352, 'multipartFile');
+INSERT INTO picture (id, content, name) VALUES (29, 22353, 'multipartFile');
+
+INSERT INTO storage_sub_storage_list (sub_storage_list_id, depth, storage_id) VALUES (2, 1, 1);
+INSERT INTO storage_sub_storage_list (sub_storage_list_id, depth, storage_id) VALUES (3, 3, 2);
+INSERT INTO storage_sub_storage_list (sub_storage_list_id, depth, storage_id) VALUES (4, 2, 30);
