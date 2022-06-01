@@ -1,6 +1,7 @@
 package tarassov.project.dto;
 
 import lombok.Data;
+import tarassov.project.model.UserType;
 
 import java.sql.Date;
 
@@ -12,7 +13,7 @@ public class UserDTO {
     private String name;
     private String email;
     private Long productLimit;
-    private String userType;
+    private UserType userType;
     private Date birthDate;
 
 }

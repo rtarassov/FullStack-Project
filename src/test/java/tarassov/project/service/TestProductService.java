@@ -46,7 +46,7 @@ class TestProductService {
     @Test
     void testSavingProductToDB() {
         when(storageRepository.getById(anyLong())).thenReturn(storage);
-        when(serviceValidations.checkForCharacters(anyString())).thenReturn(false);
+        when(serviceValidations.isValidCharacters(anyString())).thenReturn(false);
         Assertions.assertThrows(ResponseStatusException.class, () -> productService.saveProductToDB(productDTO));
         verify(storageRepository).getById(anyLong());
     }

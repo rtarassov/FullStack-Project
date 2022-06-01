@@ -22,13 +22,11 @@ public class ProductController {
 
     @GetMapping("all")
     public List<Product> findAllProducts() {
-        log.info("findAllProducts was called from: [{}]", ProductController.class);
         return productService.findAllProducts();
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Product> findProductById(@PathVariable("id") Long productId) {
-        log.info("findProductById() was called from: [{}]", ProductController.class);
         var product = productService.findProductById(productId);
         return product.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -37,7 +35,6 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) {
-        log.info("Trying to save product: [{}]", productDTO);
         var id = productService.saveProductToDB(productDTO);
         return ResponseEntity.created(URI.create("/product/%d"
                 .formatted(id)))
@@ -52,7 +49,6 @@ public class ProductController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long id) {
-        log.info("deleteProductById() called from: [{}]", ProductController.class);
         boolean deleted = productService.deleteProductById(id);
         if (deleted) {
             return ResponseEntity.noContent().build();
@@ -63,7 +59,6 @@ public class ProductController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateProductById(@PathVariable("id") Long id,
                                                @RequestBody ProductDTO productDTO) {
-        log.info("updateProductById() called from: [{}]", ProductController.class);
 
         var productId = productService.updateProductById(id, productDTO);
 

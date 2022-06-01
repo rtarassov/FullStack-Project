@@ -17,6 +17,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class StorageService {
 
     private final StorageRepository storageRepository;
@@ -37,6 +38,14 @@ public class StorageService {
         return storage;
     }
 
+    // Needed so ProductService doesn't use StorageRepository and uses StorageService instead.
+    public Storage getStorageById(Long id) {
+        return storageRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+                );
+    }
+
     public void addSubStorageToStorage(SubStorageToStorageDTO subStorageToStorageDTO) {
         try {
             var storageObject = storageRepository.getById(subStorageToStorageDTO.getStorageId());
@@ -44,13 +53,12 @@ public class StorageService {
 
             storageObject.getSubStorageList().add(subStorageObject);
             storageRepository.save(storageObject);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @Transactional
     public Long saveStorageToDB(StorageDTO storageDTO) {
         log.info("Entity to save: [{}]", storageDTO);
 
@@ -63,7 +71,7 @@ public class StorageService {
                     storageObject.setSubStorageList(subStorageList);
                 }
             }
-            if (serviceValidations.checkForCharacters(storageDTO.getName())) {
+            if (serviceValidations.isValidCharacters(storageDTO.getName())) {
                 storageObject.setName(storageDTO.getName());
             } else {
                 throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
@@ -81,7 +89,6 @@ public class StorageService {
         }
     }
 
-    @Transactional
     public boolean deleteStorageById(Long id) {
         log.info("Trying to delete Storage by id: [{}]", id);
 
@@ -94,7 +101,6 @@ public class StorageService {
         return result;
     }
 
-    @Transactional
     public Long updateStorageById(Long id, StorageDTO storageDTO) {
         log.info("Trying to update storage [{}]", storageRepository.getById(id));
         log.info("With data: [{}]", storageDTO);
@@ -102,10 +108,8 @@ public class StorageService {
         try {
             var storageObject = storageRepository.getById(id);
 
-            storageObject.setId(id);
-
             if (storageDTO.getName() != null) {
-                if (serviceValidations.checkForCharactersIgnoreLength(storageDTO.getName())) {
+                if (serviceValidations.isValidCharactersIgnoreLength(storageDTO.getName())) {
                     storageObject.setName(storageDTO.getName());
                 } else {
                     throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
@@ -114,6 +118,8 @@ public class StorageService {
             if (storageDTO.getDescription() != null) {
                 storageObject.setDescription(storageDTO.getDescription());
             }
+
+            storageRepository.save(storageObject);
             return storageObject.getId();
         } catch (IllegalArgumentException e)  {
             log.info(e.toString());

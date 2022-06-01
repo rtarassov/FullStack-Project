@@ -22,13 +22,11 @@ public class StorageController {
 
     @GetMapping("all")
     public List<Storage> findAllStorages() {
-        log.info("findAllStorages was called from :[{}]", StorageController.class);
         return storageService.findAllStorages();
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Storage> findStorageById(@PathVariable("id") Long storageId) {
-        log.info("findStorageById() was called from :[{}]", StorageController.class);
         var storage = storageService.findStorageById(storageId);
         return storage.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -36,16 +34,14 @@ public class StorageController {
 
     @PostMapping
     public ResponseEntity<StorageDTO> saveStorage(@RequestBody StorageDTO storageDTO) {
-        log.info("Trying to save storage: [{}]", storageDTO);
         var id = storageService.saveStorageToDB(storageDTO);
         return ResponseEntity.created(URI.create("/storage/%d"
                 .formatted(id)))
                 .body(storageDTO);
     }
 
-    @DeleteMapping({"{id}"})
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteStorageById(@PathVariable("id") Long id) {
-        log.info("deleteStorageById() called from [{}]", StorageController.class);
         boolean deleted = storageService.deleteStorageById(id);
         if (deleted) {
             return ResponseEntity.noContent().build();
@@ -56,7 +52,6 @@ public class StorageController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateStorageById(@PathVariable("id") Long id,
                                                @RequestBody StorageDTO storageDTO) {
-        log.info("updateStorageById() called from: [{}]", StorageController.class);
         var storageId = storageService.updateStorageById(id, storageDTO);
 
         return ResponseEntity

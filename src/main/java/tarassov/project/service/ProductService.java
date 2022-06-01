@@ -10,7 +10,6 @@ import tarassov.project.dto.ProductStorageDTO;
 import tarassov.project.model.Product;
 import tarassov.project.repository.PictureRepository;
 import tarassov.project.repository.ProductRepository;
-import tarassov.project.repository.StorageRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -22,14 +21,14 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final StorageRepository storageRepository;
+    private final StorageService storageService;
     private final ServiceValidations serviceValidations;
     private final PictureRepository pictureRepository;
 
     public void addProductToStorage(ProductStorageDTO productStorageDTO) {
         try {
             var productObject = productRepository.getById(productStorageDTO.getProductId());
-            var storageObject = storageRepository.getById(productStorageDTO.getStorageId());
+            var storageObject = storageService.getStorageById(productStorageDTO.getStorageId());
 
             productObject.setStorage(storageObject);
             productRepository.save(productObject);
@@ -45,12 +44,10 @@ public class ProductService {
 
         try {
             var productObject = new Product();
-            var storageObject = storageRepository.getById(productDTO.getStorageId());
+            var storageObject = storageService.getStorageById(productDTO.getStorageId());
 
-            if (serviceValidations.checkForCharacters(productDTO.getName())) {
+            if (serviceValidations.isValidCharacters(productDTO.getName())) {
                 productObject.setName(productDTO.getName());
-            } else {
-                throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
             }
             productObject.setSerialNumber(productDTO.getSerialNumber());
 
@@ -117,14 +114,12 @@ public class ProductService {
 
         try {
             var productObject = new Product();
-            var storageObject = storageRepository.getById(productDTO.getStorageId());
+            var storageObject = storageService.getStorageById(productDTO.getStorageId());
 
             productObject.setId(id);
 
-            if (serviceValidations.checkForCharacters(productDTO.getName())) {
+            if (serviceValidations.isValidCharacters(productDTO.getName())) {
                 productObject.setName(productDTO.getName());
-            } else {
-                throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
             }
             productObject.setSerialNumber(productDTO.getSerialNumber());
 

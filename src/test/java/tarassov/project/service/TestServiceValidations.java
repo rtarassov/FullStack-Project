@@ -22,18 +22,18 @@ class TestServiceValidations {
 
     @Test
     void checkForCharacters_validInput_returnsTrue() {
-        Assertions.assertTrue(serviceValidations.checkForCharacters(CORRECT_INPUT));
+        Assertions.assertTrue(serviceValidations.isValidCharacters(CORRECT_INPUT));
     }
 
     @Test
     void checkForCharacters_inValidInputTooLong_returnsFalse() {
-        Assertions.assertFalse(serviceValidations.checkForCharacters(INPUT_TOO_LONG));
+        Assertions.assertFalse(serviceValidations.isValidCharacters(INPUT_TOO_LONG));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {INPUT_WITH_SYMBOL, INPUT_TOO_LONG, INPUT_TOO_SHORT})
     void checkForCharacters_inValidInput_returnsFalse(String input) {
-        Assertions.assertFalse(serviceValidations.checkForCharacters(input));
+        Assertions.assertFalse(serviceValidations.isValidCharacters(input));
 
     }
 }
