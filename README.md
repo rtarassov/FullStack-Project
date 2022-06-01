@@ -49,9 +49,6 @@ Do you know what items you have in your basement, in your drawers, closets, gara
 
 This is a project, that makes it possible to keep track of this kind of a situation.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
@@ -82,15 +79,11 @@ This is an example of how to list things you need to use the software and how to
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/rtarassov/FullStack-Project-Backend.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -121,10 +114,8 @@ See the [open issues](https://github.com/rtarassov/FullStack-Project-Backend/iss
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTACT -->
-## Contact
+## Contact me
 [LinkedIn](https://ee.linkedin.com/in/richard-tarassov-aa25bb22b)
-
-[Project Link](https://github.com/rtarassov/FullStack-Project-Backend)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
