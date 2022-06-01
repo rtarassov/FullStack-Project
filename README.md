@@ -14,6 +14,7 @@
 
 </div>
 
+![FullStack-Project-ERD drawio](https://user-images.githubusercontent.com/86130632/171390807-3ce01d73-9e46-4a77-9e80-c323c52a7e7d.png)
 
 
 <!-- TABLE OF CONTENTS -->
