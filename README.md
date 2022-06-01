@@ -42,14 +42,12 @@
   </ol>
 </details>
 
-
-
-<!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Have you ever been in a situation, where you needed something like an HDMI cable or an adapter, but you don't know if you have it?
+Do you know what items you have in your basement, in your drawers, closets, garage or any place you keep a storage?
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+This is a project, that makes it possible to keep track of this kind of a situation.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -59,6 +57,8 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 * [Spring framework](https://spring.io/projects/spring-framework)
 * [PostgreSQL](https://www.postgresql.org/)
+* [Angular.JS](https://angularjs.org/)
+* [FrontEnd Repository](https://github.com/rtarassov/FullStack-Project-Frontend)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -121,35 +121,6 @@ See the [open issues](https://github.com/github_username/repo_name/issues) for a
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- CONTACT -->
 ## Contact
 [LinkedIn](https://ee.linkedin.com/in/richard-tarassov-aa25bb22b)
@@ -157,18 +128,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Project Link](https://github.com/rtarassov/FullStack-Project-Backend)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
