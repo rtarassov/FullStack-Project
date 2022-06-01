@@ -54,9 +54,6 @@ This is a project, that makes it possible to keep track of this kind of a situat
 * [Angular.JS](https://angularjs.org/)
 * [FrontEnd Repository](https://github.com/rtarassov/FullStack-Project-Frontend)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -82,10 +79,6 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- USAGE EXAMPLES -->
 ## Usage
 
@@ -93,18 +86,16 @@ This project is currently under development and there is no frontend yet, so to 
 
 [Postman workspace](https://www.postman.com/richardtarassov/workspace/fullstack-project)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 See the [open issues](https://github.com/rtarassov/FullStack-Project-Backend/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
 [LinkedIn](https://ee.linkedin.com/in/richard-tarassov-aa25bb22b)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
