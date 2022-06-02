@@ -25,13 +25,14 @@ public class ProductService {
     private final ServiceValidations serviceValidations;
     private final PictureRepository pictureRepository;
 
-    public void addProductToStorage(ProductStorageDTO productStorageDTO) {
+    public boolean addProductToStorage(ProductStorageDTO productStorageDTO) {
         try {
             var productObject = productRepository.getById(productStorageDTO.getProductId());
             var storageObject = storageService.getStorageById(productStorageDTO.getStorageId());
 
             productObject.setStorage(storageObject);
             productRepository.save(productObject);
+            return true;
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
