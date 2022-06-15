@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,5 +21,8 @@ public class Storage {
     @NotNull
     @Size(min = 3, max = 50)
     private String description;
+
+    @OneToMany
+    private List<Storage> subStorageList;
 
 }

@@ -19,8 +19,9 @@ public class PictureController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> uploadPicture(@RequestParam MultipartFile multipartFile) {
-        pictureService.uploadPicture(multipartFile);
+    public ResponseEntity<Long> uploadPicture(@RequestParam MultipartFile multipartFile,
+                                              @RequestParam String name) {
+        pictureService.uploadPicture(multipartFile, name);
         return ResponseEntity.ok().build();
     }
 

@@ -5,14 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import tarassov.project.dto.ProductRequest;
-import tarassov.project.dto.ProductStorageRequest;
+import tarassov.project.dto.ProductDTO;
+import tarassov.project.dto.ProductStorageDTO;
 import tarassov.project.model.Product;
+import tarassov.project.repository.PictureRepository;
 import tarassov.project.repository.ProductRepository;
-import tarassov.project.repository.StorageRepository;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,18 +21,18 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final StorageRepository storageRepository;
+    private final StorageService storageService;
     private final ServiceValidations serviceValidations;
+    private final PictureRepository pictureRepository;
 
-    // Doesn't work
-    public void addProductToStorage(ProductStorageRequest productStorageRequest) {
+    public boolean addProductToStorage(ProductStorageDTO productStorageDTO) {
         try {
-            var storageObject = storageRepository.getById(productStorageRequest.getStorageId());
-            // TODO:
-            // Need to rethink the database, because here I would need to have a List<Product> in Storage,
-            // But it messes up the tables.
-            // storageObject.getProduct().add(productObject);
-            storageRepository.save(storageObject);
+            var productObject = productRepository.getById(productStorageDTO.getProductId());
+            var storageObject = storageService.getStorageById(productStorageDTO.getStorageId());
+
+            productObject.setStorage(storageObject);
+            productRepository.save(productObject);
+            return true;
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -41,33 +40,45 @@ public class ProductService {
     }
 
     @Transactional
-    public Long saveProductToDB(ProductRequest productRequest) {
-        log.info("Entity to save: [{}]", productRequest);
+    public Long saveProductToDB(ProductDTO productDTO) {
+        log.info("Entity to save: [{}]", productDTO);
 
         try {
-            var storageObject = storageRepository.getById(productRequest.getStorageId());
             var productObject = new Product();
+            var storageObject = storageService.getStorageById(productDTO.getStorageId());
 
-            if (serviceValidations.checkForCharacters(productRequest.getName())) {
-                productObject.setName(productRequest.getName());
-            } else {
-                throw new IllegalArgumentException("Name is not at least 3 characters or contains symbols.");
+            if (serviceValidations.isValidCharacters(productDTO.getName())) {
+                productObject.setName(productDTO.getName());
             }
-            productObject.setSerialNumber(productRequest.getSerialNumber());
-            productObject.setDescription(productRequest.getDescription());
-            productObject.setProductType(productRequest.getProductType());
-            productObject.setPrice(productRequest.getPrice());
+            productObject.setSerialNumber(productDTO.getSerialNumber());
+
+            if (productDTO.getPictureId() != null) {
+                productObject.setPicture(pictureRepository.getById(productDTO.getPictureId()));
+            }
+            if (productDTO.getDescription() != null) {
+                productObject.setDescription(productDTO.getDescription());
+            } else {
+                throw new IllegalArgumentException("You must provide a description");
+            }
+            productObject.setProductType(productDTO.getProductType());
+
+            if (productDTO.getPrice() > 0) {
+                productObject.setPrice(productDTO.getPrice());
+            } else {
+                throw new IllegalArgumentException("Price must be higher than 0.");
+            }
+            productObject.setPurchaseDate(productDTO.getPurchaseDate());
             productObject.setStorage(storageObject);
-            productObject.setPurchaseDate(Date.valueOf(productRequest.getPurchaseDate()));
 
             productRepository.save(productObject);
+            log.info("Product saved successfully.");
             return productObject.getId();
         } catch (IllegalArgumentException e) {
             log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            log.info(e.toString());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
     }
 
@@ -96,5 +107,46 @@ public class ProductService {
         var products = productRepository.findAll();
         log.info("Products found: " + products);
         return products;
+    }
+
+    @Transactional
+    public Long updateProductById(Long id, ProductDTO productDTO) {
+        log.info("Trying to update product [{}]", productDTO);
+
+        try {
+            var productObject = new Product();
+            var storageObject = storageService.getStorageById(productDTO.getStorageId());
+
+            productObject.setId(id);
+
+            if (serviceValidations.isValidCharacters(productDTO.getName())) {
+                productObject.setName(productDTO.getName());
+            }
+            productObject.setSerialNumber(productDTO.getSerialNumber());
+
+            if (productDTO.getPictureId() != null) {
+                productObject.setPicture(pictureRepository.getById(productDTO.getPictureId()));
+            }
+            productObject.setDescription(productDTO.getDescription());
+            productObject.setProductType(productDTO.getProductType());
+
+            if (productDTO.getPrice() > 0) {
+                productObject.setPrice(productDTO.getPrice());
+            } else {
+                throw new IllegalArgumentException("Price must be higher than 0.");
+            }
+            productObject.setPurchaseDate(productDTO.getPurchaseDate());
+            productObject.setStorage(storageObject);
+
+            productRepository.save(productObject);
+            log.info("Product saved successfully.");
+            return productObject.getId();
+        } catch (IllegalArgumentException e) {
+            log.info(e.toString());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.info(e.toString());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

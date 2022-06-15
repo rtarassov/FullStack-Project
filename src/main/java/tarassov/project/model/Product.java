@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -24,8 +23,8 @@ public class Product {
     @Size(min = 5, max = 20)
     private String serialNumber;
 
-    @OneToMany
-    private List<Picture> picture;
+    @OneToOne
+    private Picture picture;
 
     @NotNull
     @Size(min = 5, max = 50)
